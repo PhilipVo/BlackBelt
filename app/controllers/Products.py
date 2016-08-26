@@ -6,18 +6,29 @@ class Products(Controller):
 		self.load_model('Product')
 		self.db = self._app.db
 
+	############### GET ###################
 	def index(self):
-		return self.load_view('index.html', products=self.models['Product'].get_products())
+		if session.get('id'):
+			return self.load_view('products.html', products=self.models['Product'].get_products())
+		return redirect('/')		
 
 	def new(self):
-		return self.load_view('new.html')
+		if session.get('id'):
+			return self.load_view('new.html')
+		return redirect('/')		
 
 	def edit(self, id):
-		return self.load_view('edit.html', product=self.models['Product'].get_product(id))
+		if session.get('id'):		
+			return self.load_view('edit.html', product=self.models['Product'].get_product(id))
+		return redirect('/')		
 
 	def show(self, id):
-		return self.load_view('show.html', product=self.models['Product'].get_product(id))
+		if session.get('id'):
+			return self.load_view('show.html', product=self.models['Product'].get_product(id))
+		return redirect('/')		
 
+
+	############### POST ###################
 	def create(self):
 		status = self.models['Product'].create_product(request.form)
 		if status['status'] == True:

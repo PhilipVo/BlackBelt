@@ -1,0 +1,24 @@
+.flash {
+	width: 300px;
+	position: absolute;
+	margin: 0px auto;
+	top: 75px;
+	left: 0;
+	right: 0;
+}
+
+.error, .success {
+	padding: 5px;
+	border: solid 2px black;
+	text-align: center;
+}
+
+.error {
+	color: white;	
+	background-color: red;
+}
+
+.success {
+	color: green;	
+	background-color: lightgreen;
+}

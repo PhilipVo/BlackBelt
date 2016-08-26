@@ -34,8 +34,8 @@ class Product(Model):
 			return {'status': False, 'log': log}
 
 		# Insert valid entry:
-		query = """INSERT INTO products (name, description, price, created_at, updated_at)
-					VALUES (:name, :description, :price, NOW(), NOW())
+		query = """INSERT INTO products (name, description, price, user_id, created_at, updated_at)
+					VALUES (:name, :description, :price, 7, NOW(), NOW())
 				"""
 		self.db.query_db(query, data)	
 		log.append("{} added to database.".format(data['name']))					
