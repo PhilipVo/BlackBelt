@@ -1,0 +1,35 @@
+<html>
+<head>
+	<link rel="stylesheet" href="/static/css/stylesheet.css" type="text/css">
+	<title>Create a new product</title>
+</head>
+<body>
+	<div id="flash">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<p class="{{category}}">{{message}}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+	<h3>Product {{product['id']}}</h3>
+	<table>
+		<tr>
+			<td>Name:</td>
+			<td>{{product['name']}}</td>
+		</tr>
+		<tr>
+			<td>Description:</td>
+			<td>{{product['description']}}</td>
+		</tr>
+		<tr>
+			<td>Price:</td>
+			<td>{{product['price']}}</td>
+		</tr>
+	</table>
+	<br>
+	<a href="/products/edit/{{product['id']}}">Edit</a> | <a href="/">Back</a>  
+
+</body>
+</html>

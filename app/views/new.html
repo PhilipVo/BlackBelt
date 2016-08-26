@@ -1,0 +1,30 @@
+<html>
+<head>
+	<link rel="stylesheet" href="/static/css/stylesheet.css" type="text/css">
+	<title>Create a new product</title>
+</head>
+<body>
+	<div id="flash">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<p class="{{category}}">{{message}}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+	<h3>Add a new product</h3>
+	<form action="/products/create" method="POST">
+		Name<br>
+		<input type="text" name="name"><br><br>
+		Description<br>
+		<input type="text" name="description"><br><br>
+		Price<br>
+		<input type="text" name="price"><br><br>
+		<input class="button" type="submit" value="Create">
+	</form>
+	<br>
+	<a href="/">Go back</a>
+
+</body>
+</html>

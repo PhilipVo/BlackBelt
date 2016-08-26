@@ -1,0 +1,30 @@
+<html>
+<head>
+	<link rel="stylesheet" href="/static/css/stylesheet.css" type="text/css">
+	<title>Edit Product {{product['id']}}</title>
+</head>
+<body>
+	<div id="flash">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<p class="{{category}}">{{message}}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+	<h3>Edit Product {{product['id']}}</h3>
+	<form action="/products/update/{{product['id']}}" method="POST">
+		Name<br>
+		<input type="text" name="name" value="{{product['name']}}"><br><br>
+		Description<br>
+		<input type="text" name="description" value="{{product['description']}}"><br><br>
+		Price<br>
+		<input type="text" name="price" value="{{product['price']}}"><br><br>
+		<input class="button" type="submit" value="Update">
+	</form>
+	<br>
+	<a href="/products/show/{{product['id']}}">Show</a> | <a href="/">Back</a>  
+
+</body>
+</html>
