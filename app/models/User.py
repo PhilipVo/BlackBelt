@@ -7,12 +7,15 @@ class User(Model):
 	def __init__(self):
 		super(User, self).__init__()
 
-	def get_user(self, id):
-		data = {'id': id}
-		query = """SELECT *, DATE_FORMAT(created_at, '%b %d, %Y') AS user_date
-							FROM users WHERE id = :id LIMIT 1
+	def get_users(self, user_id):
+		query = """SELECT *, COUNT(pokes.id) as poke_count, 
+							users.id as user_id FROM users
+							LEFT JOIN pokes on users.id = pokes.receiver_id
+							WHERE users.id != :user_id
+							GROUP BY users.id
 						"""
-		return self.db.query_db(query, data)[0]				
+		data = {'user_id': user_id}
+		return self.db.query_db(query, data)
 
 	def login(self, data):
 		log = []
@@ -51,13 +54,13 @@ class User(Model):
 				return {'status': False, 'log': log}
 
 		# Check for valid first name:
-		if len(data['first_name']) < 2 or not data['first_name'].isalpha():
+		if len(data['name']) < 2:
 			log.append('Registration error: please enter a valid first name (letters only).')
 			return {'status': False, 'log': log}
 
-		# Check for valid last name:
-		if len(data['last_name']) < 2 or not data['last_name'].isalpha():
-			log.append('Registration error: please enter a valid last name (letters only).')
+		# Check for valid alias:
+		if len(data['alias']) < 2:
+			log.append('Registration error: please enter a longer alias.')
 			return {'status': False, 'log': log}
 
 		# Check for valid email:
@@ -81,7 +84,6 @@ class User(Model):
 			log.append('Registration error: password confirmation does not match.')
 			return {'status': False, 'log': log}
 
-
 		# # Set user level:
 		# query = "SELECT * FROM users LIMIT 1"
 		# if len(self.db.query_db(query)) == 0:
@@ -98,9 +100,8 @@ class User(Model):
 		dat['password'] = self.bcrypt.generate_password_hash(dat['password'])
 
 		# Add to database:
-		query = """INSERT INTO users (first_name, last_name, email,
-							password, created_at, updated_at)
-							VALUES (:first_name, :last_name, :email, :password, NOW(), NOW())
+		query = """INSERT INTO users (name, email, alias, password, birthday, created_at, updated_at)
+							VALUES (:name, :email, :alias, :password, :birthday, NOW(), NOW())
 						"""
 		self.db.query_db(query, dat)						
 		query = "SELECT * FROM users WHERE email = :email LIMIT 1"		

@@ -11,17 +11,20 @@ class Users(Controller):
 	########## GET ##########
 	def index(self):
 		if session.get('id'):
-			return redirect('/products')
-		return self.load_view('index.html')
+			return redirect('/pokes')
+		return self.load_view('main.html')
 
+	def logout(self):
+		session.clear()
+		return redirect('/')			
 
 	########## POST ##########		
 	def register(self):
 		output = self.models['User'].register(request.form)
 		if output['status'] == True:
 			session['id'] = output['user']['id']
-			session['first_name'] = output['user']['first_name']			
-			return redirect('/products')
+			session['alias'] = output['user']['alias']			
+			return redirect('/pokes')
 		else:
 			for message in output['log']:
 				flash(message, 'error')
@@ -31,13 +34,10 @@ class Users(Controller):
 		output = self.models['User'].login(request.form)
 		if output['status'] == True:
 			session['id'] = output['user']['id']
-			session['first_name'] = output['user']['first_name']
-			return redirect('/products')
+			session['alias'] = output['user']['alias']
+			return redirect('/pokes')
 		else:
 			for message in output['log']:
 				flash(message, 'error')
 			return redirect('/')
 
-	def logout(self):
-		session.clear()
-		return redirect('/')			

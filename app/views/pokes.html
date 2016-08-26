@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="Pokes">
+	<title>Pokes</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+	<div class='container'>
+		<a class="pull-right" href="/logout">Logout</a>	
+		<h1>Welcome, {{session.alias}}!</h1>
+		<p>{{pokes|length}} people poked you!</p>
+		<br>
+		<div class='col-sm-4' style="border:solid 2px black;">
+			{% for poke in pokes %}
+				<p>{{poke.alias}} poked you {{poke.poke_count}} times.</p>
+			{% endfor %}
+		</div>
+		<br><br>
+
+		<div class='col-sm-12'>
+			<p>People you may want to poke:</p>
+			<table class="table">
+				<thead>
+					<th>Name</th>
+					<th>Alias</th>
+					<th>Email Address</th>
+					<th>Poke History</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					{% for user in users %}
+						<tr>
+							<td>{{user['name']}}</td>
+							<td>{{user['alias']}}</td>
+							<td>{{user['email']}}</td>
+							<td>{{user['poke_count']}}</td>
+							<td>
+								<a href="/pokes/poke/{{session.id}}/{{user.user_id}}"><button>Poke!</button></a> 
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<br>
+		</div>
+	</div>
+
+	<div id="flash">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<p class="{{category}}">{{message}}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+</body>
+</html>
